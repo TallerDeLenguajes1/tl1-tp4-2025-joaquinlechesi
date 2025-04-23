@@ -22,6 +22,7 @@ struct Nodo{
 struct Nodo *crearListaVacia();
 struct Nodo *crearNodo(int IDtarea, char *descripcion, int duracion);
 void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva);
+void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2);
 
 int main()
 {
@@ -33,30 +34,34 @@ int main()
     p_ID = &ID;
     char Buff[100];
     char *cadena;
-    puts("Selecione una tarea: 1: Ingresar tareas, 0: Finalizar");
+    puts("Selecione una tarea:\n1: Ingresar tareas\n2 Marcar una tarea pendiente como realizada\n0: Finalizar");
     scanf("%d", &opcion);
     do
     {
         switch (opcion)
         {
             case 1:
-            struct Nodo *nuevaTarea;
-            puts("Ingrese la descripcion de la tarea.");
-            fflush(stdin);
-            gets(Buff);
-            longitud = strlen(Buff) + 1;
-            cadena = (char *)malloc(sizeof(char));
-            strcpy(cadena, Buff);
-            puts("Ingrese la duracion de la tarea:");
-            scanf("%d", &duracion);
-            nuevaTarea = crearNodo(*p_ID, cadena, duracion);
-            insertarTareaAlFinal(&TareasPendientes, nuevaTarea);
+                struct Nodo *nuevaTarea;
+                puts("Ingrese la descripcion de la tarea.");
+                fflush(stdin);
+                gets(Buff);
+                longitud = strlen(Buff) + 1;
+                cadena = (char *)malloc(sizeof(char));
+                strcpy(cadena, Buff);
+                puts("Ingrese la duracion de la tarea:");
+                scanf("%d", &duracion);
+                nuevaTarea = crearNodo(*p_ID, cadena, duracion);
+                (*p_ID)++;
+                insertarTareaAlFinal(&TareasPendientes, nuevaTarea);
+            break;
+            case 2:
+                marcarTareaRealizada(&TareasPendientes, &TareasRealizadas);
             break;
             
             default:
             break;
         }
-        puts("Selecione una tarea: 1: Ingresar tareas, 0: Finalizar");
+        puts("Selecione una tarea:\n1: Ingresar tareas\n2 Marcar una tarea pendiente como realizada\n0: Finalizar");
         scanf("%d", &opcion);
     } while (opcion != 0);
     
@@ -161,6 +166,7 @@ void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva){
         {
             aux = aux->Siguiente;
         }
+        //tareaNueva->Siguiente = NULL;
         aux->Siguiente = tareaNueva;
     }
     else
@@ -168,6 +174,24 @@ void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva){
         *listaTareas = tareaNueva;
     }
     
+}
+
+void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2){
+    int IDtarea;
+    puts("Ingrese el ID de la tarea que desea marcar como realizada.");
+    scanf("%d", &IDtarea);
+    struct Nodo **aux = listaTareas;
+    while (*aux && (*aux)->T.TareaID != IDtarea)
+    {
+        *aux = (*aux)->Siguiente;
+    }
+    if (*aux)
+    {
+        struct Nodo *aux2 = *aux;
+        *aux = (*aux)->Siguiente;
+        aux2->Siguiente = NULL;
+        insertarTareaAlFinal(listaTareas2, aux2);
+    }
 }
 
 //void agregarTarea(struct Nodo **Start, int *p_ID){
