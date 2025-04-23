@@ -21,6 +21,7 @@ struct Nodo{
 //void agregarTarea(struct Nodo **Start, int *p_ID);
 struct Nodo *crearListaVacia();
 struct Nodo *crearNodo(int IDtarea, char *descripcion, int duracion);
+void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva);
 
 int main()
 {
@@ -28,12 +29,39 @@ int main()
     struct Nodo * TareasPendientes, * TareasRealizadas;
     TareasPendientes = crearListaVacia();
     TareasRealizadas = crearListaVacia();
-    int tarea = 0, ID = 1000, longitud, duracion, *p_ID;
+    int opcion = 0, ID = 1000, longitud, duracion, *p_ID;
     p_ID = &ID;
-    puts("Selecione una tarea: 1: Ingresar tareas, 2: Finalizar");
-    scanf("%d", &tarea);
-    while (tarea != 2)
+    char Buff[100];
+    char *cadena;
+    puts("Selecione una tarea: 1: Ingresar tareas, 0: Finalizar");
+    scanf("%d", &opcion);
+    do
     {
+        switch (opcion)
+        {
+            case 1:
+            struct Nodo *nuevaTarea;
+            puts("Ingrese la descripcion de la tarea.");
+            fflush(stdin);
+            gets(Buff);
+            longitud = strlen(Buff) + 1;
+            cadena = (char *)malloc(sizeof(char));
+            strcpy(cadena, Buff);
+            puts("Ingrese la duracion de la tarea:");
+            scanf("%d", &duracion);
+            nuevaTarea = crearNodo(*p_ID, cadena, duracion);
+            insertarTareaAlFinal(&TareasPendientes, nuevaTarea);
+            break;
+            
+            default:
+            break;
+        }
+        puts("Selecione una tarea: 1: Ingresar tareas, 0: Finalizar");
+        scanf("%d", &opcion);
+    } while (opcion != 0);
+    
+    //while (tarea != 2)
+    //{
         
         //struct Nodo * nuevaTarea = (struct Nodo *)malloc(sizeof(struct Nodo));
         //nuevaTarea->Siguiente = NULL;
@@ -64,19 +92,7 @@ int main()
         //}
         //
         //ID++;
-        switch (tarea)
-        {
-            case 1:
-            //nuevaTarea(&TareasPendientes, p_ID);
-            /* code */
-            break;
-            
-            default:
-            break;
-        }
-        scanf("%d", &tarea);
-        puts("Selecione una tarea: 1: Ingresar tareas, 2: Finalizar");
-    }
+    //}
     //puts("Prototipo de funcion marcar.");
     //if (TareasPendientes == NULL) //referencia a lo que apunta Lista (puntero doble)
     //{
@@ -135,6 +151,23 @@ struct Nodo *crearNodo(int IDtarea, char *descripcion, int duracion){
     nuevoNodo->T.TareaID = IDtarea;
     nuevoNodo->T.Descripcion = descripcion;
     nuevoNodo->T.Duracion = duracion;
+}
+
+void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva){
+    struct Nodo* aux = *listaTareas;
+    if (*listaTareas)
+    {
+        while (aux->Siguiente)
+        {
+            aux = aux->Siguiente;
+        }
+        aux->Siguiente = tareaNueva;
+    }
+    else
+    {
+        *listaTareas = tareaNueva;
+    }
+    
 }
 
 //void agregarTarea(struct Nodo **Start, int *p_ID){
