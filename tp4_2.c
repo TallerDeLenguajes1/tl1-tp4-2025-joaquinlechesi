@@ -23,6 +23,7 @@ struct Nodo *crearListaVacia();
 struct Nodo *crearNodo(int IDtarea, char *descripcion, int duracion);
 void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva);
 void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2);
+void listarTareas(struct Nodo *listaTarea);
 
 int main()
 {
@@ -34,7 +35,7 @@ int main()
     p_ID = &ID;
     char Buff[100];
     char *cadena;
-    puts("Selecione una tarea:\n1: Ingresar tareas\n2 Marcar una tarea pendiente como realizada\n0: Finalizar");
+    puts("Selecione una tarea:\n1: Ingresar tareas\n2: Marcar una tarea pendiente como realizada\n3: Listar tareas pendientes y tareas realizadas\n0: Finalizar");
     scanf("%d", &opcion);
     do
     {
@@ -57,11 +58,17 @@ int main()
             case 2:
                 marcarTareaRealizada(&TareasPendientes, &TareasRealizadas);
             break;
+            case 3:
+                puts("Lista de tareas PENDIENTES:");
+                listarTareas(TareasPendientes);
+                puts("Lista de tareas REALIZADAS:");
+                listarTareas(TareasRealizadas);
+            break;
             
             default:
             break;
         }
-        puts("Selecione una tarea:\n1: Ingresar tareas\n2 Marcar una tarea pendiente como realizada\n0: Finalizar");
+        puts("Selecione una tarea:\n1: Ingresar tareas\n2: Marcar una tarea pendiente como realizada\n3: Listar tareas pendientes y tareas realizadas\n0: Finalizar");
         scanf("%d", &opcion);
     } while (opcion != 0);
     
@@ -180,18 +187,48 @@ void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2)
     int IDtarea;
     puts("Ingrese el ID de la tarea que desea marcar como realizada.");
     scanf("%d", &IDtarea);
-    struct Nodo **aux = listaTareas;
-    while (*aux && (*aux)->T.TareaID != IDtarea)
+    struct Nodo *aux = *listaTareas;
+    struct Nodo *aux2 = *listaTareas;
+    while (aux && aux->T.TareaID != IDtarea)
     {
-        *aux = (*aux)->Siguiente;
+        aux2 = aux;
+        aux = aux->Siguiente;
     }
-    if (*aux)
+    if (aux)
     {
-        struct Nodo *aux2 = *aux;
-        *aux = (*aux)->Siguiente;
-        aux2->Siguiente = NULL;
-        insertarTareaAlFinal(listaTareas2, aux2);
+        if (aux == *listaTareas)
+        {
+            /* code */
+            *listaTareas = (*listaTareas)->Siguiente;
+        }
+        else
+        {
+            aux2->Siguiente = aux2->Siguiente->Siguiente;
+        }
+        
+        //aux = aux->Siguiente;
+        aux->Siguiente = NULL;
+        insertarTareaAlFinal(listaTareas2, aux);
     }
+}
+
+void listarTareas(struct Nodo *listaTarea){
+    struct Nodo *aux = listaTarea;
+    if (aux)
+    {
+        //printf("\n");
+        while (aux)
+        {
+            printf("--\nID: %d\nDescripcion: %s\nDuracion: %d\n", aux->T.TareaID, aux->T.Descripcion, aux->T.Duracion);
+            aux = aux->Siguiente;
+        }
+        
+    }
+    else
+    {
+        puts("La lista se encuentra vacia.");
+    }
+    
 }
 
 //void agregarTarea(struct Nodo **Start, int *p_ID){
