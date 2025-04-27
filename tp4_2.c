@@ -24,6 +24,8 @@ struct Nodo *crearNodo(int IDtarea, char *descripcion, int duracion);
 void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva);
 void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2);
 void listarTareas(struct Nodo *listaTarea);
+void consultarTareaPorID();
+void consultarTareaPorPalabra();
 
 int main()
 {
