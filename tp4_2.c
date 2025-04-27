@@ -24,7 +24,7 @@ struct Nodo *crearNodo(int IDtarea, char *descripcion, int duracion);
 void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva);
 void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2);
 void listarTareas(struct Nodo *listaTarea);
-void consultarTareaPorID();
+void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, int ID);
 void consultarTareaPorPalabra();
 
 int main()
@@ -231,6 +231,32 @@ void listarTareas(struct Nodo *listaTarea){
         puts("La lista se encuentra vacia.");
     }
     
+}
+
+void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, int ID){
+    struct Nodo *aux = listaTareas;
+    while (aux && aux->T.TareaID != ID)
+    {
+        aux = aux->Siguiente;
+    }
+    if (aux)
+    {
+        printf("\nLa tarea consultada por el ID %d tiene de descripcion:\n%s\nY su duracion es: %d", ID, aux->T.Descripcion, aux->T.Duracion);
+    }else
+    {
+        aux = listaTareas2;
+        while (aux && aux->T.TareaID != ID)
+        {
+            aux = aux->Siguiente;
+        }
+        if (aux)
+        {
+            printf("\nLa tarea consultada por el ID %d tiene de descripcion:\n%s\nY su duracion es: %d", ID, aux->T.Descripcion, aux->T.Duracion);
+        }else
+        {
+            puts("No e encontro dicha tarea por ID.");
+        }
+    }
 }
 
 //void agregarTarea(struct Nodo **Start, int *p_ID){
