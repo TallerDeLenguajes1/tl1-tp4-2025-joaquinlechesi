@@ -33,11 +33,11 @@ int main()
     struct Nodo * TareasPendientes, * TareasRealizadas;
     TareasPendientes = crearListaVacia();
     TareasRealizadas = crearListaVacia();
-    int opcion = 0, ID = 1000, longitud, duracion, *p_ID;
+    int opcion = 0, ID = 1000, longitud, duracion, *p_ID, IDBusqueda;
     p_ID = &ID;
     char Buff[100];
     char *cadena;
-    puts("Selecione una tarea:\n1: Ingresar tareas\n2: Marcar una tarea pendiente como realizada\n3: Listar tareas pendientes y tareas realizadas\n0: Finalizar");
+    puts("Selecione una tarea:\n1: Ingresar tareas\n2: Marcar una tarea pendiente como realizada\n3: Listar tareas pendientes y tareas realizadas\n4: Buscar tarea por ID:\n5: Buscar tarea por descripcion\n0: Finalizar");
     scanf("%d", &opcion);
     do
     {
@@ -66,11 +66,16 @@ int main()
                 puts("Lista de tareas REALIZADAS:");
                 listarTareas(TareasRealizadas);
             break;
+            case 4:
+                puts("Ingrese el ID de la tarea que desea buscar");
+                scanf("%d", &IDBusqueda);
+                consultarTareaPorID(TareasPendientes, TareasRealizadas, IDBusqueda);
+            break;
             
             default:
             break;
         }
-        puts("Selecione una tarea:\n1: Ingresar tareas\n2: Marcar una tarea pendiente como realizada\n3: Listar tareas pendientes y tareas realizadas\n0: Finalizar");
+        puts("Selecione una tarea:\n1: Ingresar tareas\n2: Marcar una tarea pendiente como realizada\n3: Listar tareas pendientes y tareas realizadas\n4: Buscar tarea por ID:\n5: Buscar tarea por descripcion\n0: Finalizar");
         scanf("%d", &opcion);
     } while (opcion != 0);
     
@@ -241,7 +246,7 @@ void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, in
     }
     if (aux)
     {
-        printf("\nLa tarea consultada por el ID %d tiene de descripcion:\n%s\nY su duracion es: %d", ID, aux->T.Descripcion, aux->T.Duracion);
+        printf("La tarea consultada por el ID %d tiene de descripcion:\n%s\nY su duracion es: %d\n", ID, aux->T.Descripcion, aux->T.Duracion);
     }else
     {
         aux = listaTareas2;
@@ -251,10 +256,10 @@ void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, in
         }
         if (aux)
         {
-            printf("\nLa tarea consultada por el ID %d tiene de descripcion:\n%s\nY su duracion es: %d", ID, aux->T.Descripcion, aux->T.Duracion);
+            printf("La tarea consultada por el ID %d tiene de descripcion:\n%s\nY su duracion es: %d\n", ID, aux->T.Descripcion, aux->T.Duracion);
         }else
         {
-            puts("No e encontro dicha tarea por ID.");
+            puts("No se encontro dicha tarea por ID.");
         }
     }
 }
