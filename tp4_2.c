@@ -25,7 +25,7 @@ void insertarTareaAlFinal(struct Nodo **listaTareas, struct Nodo *tareaNueva);
 void marcarTareaRealizada(struct Nodo **listaTareas, struct Nodo **listaTareas2);
 void listarTareas(struct Nodo *listaTarea);
 void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, int ID);
-void consultarTareaPorPalabra();
+void consultarTareaPorPalabra(struct Nodo *listaTareas, struct Nodo *listaTareas2, char *descripcion);
 
 int main()
 {
@@ -70,6 +70,11 @@ int main()
                 puts("Ingrese el ID de la tarea que desea buscar");
                 scanf("%d", &IDBusqueda);
                 consultarTareaPorID(TareasPendientes, TareasRealizadas, IDBusqueda);
+            break;
+            case 5:
+                puts("Ingrese la descripcion de la tarea que desea buscar");
+                gets(Buff);
+                consultarTareaPorPalabra(TareasPendientes, TareasRealizadas, Buff);
             break;
             
             default:
@@ -260,6 +265,32 @@ void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, in
         }else
         {
             puts("No se encontro dicha tarea por ID.");
+        }
+    }
+}
+
+void consultarTareaPorPalabra(struct Nodo *listaTareas, struct Nodo *listaTareas2, char *descripcion){
+    struct Nodo *aux = listaTareas;
+    while (aux && strstr(aux->T.Descripcion, descripcion)) //La función strstr() busca la primera aparición de string2 en string1. La función ignora el carácter nulo (\0) que finaliza string2 en el proceso coincidente.
+    {
+        aux = aux->Siguiente;
+    }
+    if (aux)
+    {
+        printf("La tarea consultada por la descripcion \"%s\" tiene ID:\n%d\nY su duracion es: %d\n", aux->T.Descripcion, aux->T.TareaID, aux->T.Duracion);
+    }else
+    {
+        aux = listaTareas2;
+        while (aux && strstr(aux->T.Descripcion, descripcion))
+        {
+            aux = aux->Siguiente;
+        }
+        if (aux)
+        {
+            printf("La tarea consultada por la descripcion \"%s\" tiene ID:\n%d\nY su duracion es: %d\n", aux->T.Descripcion, aux->T.TareaID, aux->T.Duracion);
+        }else
+        {
+            puts("No se encontro dicha tarea por descripcion.");
         }
     }
 }
