@@ -73,6 +73,7 @@ int main()
             break;
             case 5:
                 puts("Ingrese la descripcion de la tarea que desea buscar");
+                fflush(stdin);
                 gets(Buff);
                 consultarTareaPorPalabra(TareasPendientes, TareasRealizadas, Buff);
             break;
@@ -271,7 +272,7 @@ void consultarTareaPorID(struct Nodo *listaTareas, struct Nodo *listaTareas2, in
 
 void consultarTareaPorPalabra(struct Nodo *listaTareas, struct Nodo *listaTareas2, char *descripcion){
     struct Nodo *aux = listaTareas;
-    while (aux && strstr(aux->T.Descripcion, descripcion)) //La función strstr() busca la primera aparición de string2 en string1. La función ignora el carácter nulo (\0) que finaliza string2 en el proceso coincidente.
+    while (aux && !strstr(aux->T.Descripcion, descripcion)) //La función strstr() busca la primera aparición de string2 en string1. La función ignora el carácter nulo (\0) que finaliza string2 en el proceso coincidente.
     {
         aux = aux->Siguiente;
     }
@@ -281,7 +282,7 @@ void consultarTareaPorPalabra(struct Nodo *listaTareas, struct Nodo *listaTareas
     }else
     {
         aux = listaTareas2;
-        while (aux && strstr(aux->T.Descripcion, descripcion))
+        while (aux && !strstr(aux->T.Descripcion, descripcion))
         {
             aux = aux->Siguiente;
         }
